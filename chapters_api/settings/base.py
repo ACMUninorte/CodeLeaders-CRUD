@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "authentication.apps.AuthenticationConfig",
     "core.apps.CoreConfig",
     "rest_framework",
     "corsheaders",
@@ -47,6 +48,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = "authentication.User"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
