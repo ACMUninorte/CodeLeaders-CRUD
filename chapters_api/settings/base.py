@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "djoser",
     "authentication.apps.AuthenticationConfig",
     "core.apps.CoreConfig",
     "rest_framework",
@@ -80,3 +81,25 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# API Settings
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "PERMISSIONS": {
+        "user_list": ["rest_framework.permissions.IsAdminUser"],
+        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+    },
+    "TOKEN_MODEL": None,
+    "HIDE_USERS": False,
+    "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
+    "SEND_ACTIVATION_EMAIL": True,
+}

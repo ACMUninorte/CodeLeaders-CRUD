@@ -16,8 +16,6 @@ test_data_1 = {
 user1_data = {
     "username": "user1",
     "email": "u1@example.com",
-    "first_name": "u1One",
-    "last_name": "u2Last",
 }
 
 

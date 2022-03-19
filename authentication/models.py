@@ -1,10 +1,12 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField(
@@ -22,8 +24,51 @@ class User(AbstractUser):
     )
     email = models.EmailField(_("email address"), db_index=True, unique=True)
 
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+
+    objects = UserManager()
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
+    def __str__(self):
+        return self.username
+
+    def get_full_name(self):
+        return self.username
+
+    def get_short_name(self):
+        return self.username
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def clean(self):
+        super().clean()
+        self.email = self.__class__.objects.normalize_email(self.email)
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    first_name = models.CharField(_("first name"), max_length=30, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
     student_code = models.CharField(max_length=15, blank=True)
     career = models.CharField(max_length=80, blank=True)

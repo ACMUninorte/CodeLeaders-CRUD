@@ -8,7 +8,7 @@ def get_or_create_user(data):
     username = data.pop("username")
 
     profile_data = {}
-    profile_fields = ["student_code", "career"]
+    profile_fields = ["student_code", "career", "first_name", "last_name"]
 
     for profile_field in profile_fields:
         if profile_field in data:
@@ -28,3 +28,6 @@ def get_or_create_user(data):
         user.save(update_fields=["password"])
 
     return user
+
+
+#
