@@ -1,0 +1,14 @@
+{% block subject %}
+Recuperación de contraseña de {{ site_name }}
+{% endblock subject %}
+
+{% block text_body %}
+Para cambiar tu contraseña haz clic en el siguiente link
+{{ url }}
+{% endblock text_body %}
+
+{% block html_body %}
+
+<p>Para cambiar tu contraseña haz clic en el siguiente link</p>
+<a href="{{ url }}">{{ url }}</a>
+{% endblock html_body %}

@@ -18,4 +18,5 @@ from django.urls.conf import path
 
 urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),
+    path("users/", include("authentication.urls")),
 ]

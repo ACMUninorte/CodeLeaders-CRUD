@@ -37,7 +37,7 @@ ROOT_URLCONF = "chapters_api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "authentication/templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -91,15 +91,18 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-    "USER_CREATE_PASSWORD_RETYPE": True,
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_URL": config("PASSWORD_RESET_CONFIRM_URL"),
     "PERMISSIONS": {
-        "user_list": ["rest_framework.permissions.IsAdminUser"],
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
     },
     "TOKEN_MODEL": None,
     "HIDE_USERS": False,
     "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
-    "SEND_ACTIVATION_EMAIL": True,
+    "EMAIL": {"password_reset": "authentication.emails.PassResetEmail"},
 }
+
+WELCOME_URL = config("WELCOME_URL")
+
+SITE_NAME = config("SITE_NAME")

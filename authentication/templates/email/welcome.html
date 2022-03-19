@@ -1,0 +1,13 @@
+{% block subject %}
+Bienvenido a {{ site_name }}
+{% endblock subject %}
+
+{% block text_body %}
+Si deseas usar la página debes asignar una contraseña, para ello haz clic en el siguiente link:
+{{ url }}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>Si deseas usar la página debes asignar una contraseña, para ello haz clic en el siguiente link:</p>
+<a href="{{ url }}">{{ url }}</a>
+{% endblock html_body %}

@@ -1,6 +1,7 @@
+from django.core import mail
 from django.test import TestCase
 
-from authentication.helpers import get_or_create_user
+from authentication.helpers import get_or_create_user, send_welcome_email
 from authentication.models import User
 from core.tests.assertions import InstanceAssertionsMixin
 
@@ -19,7 +20,7 @@ user1_data = {
 }
 
 
-class TestManualRegisterSerializer(TestCase, InstanceAssertionsMixin):
+class TestAuthModels(TestCase, InstanceAssertionsMixin):
     @classmethod
     def setUpTestData(cls):
         cls.user1 = User.objects.create(**user1_data)
@@ -54,3 +55,17 @@ class TestManualRegisterSerializer(TestCase, InstanceAssertionsMixin):
         self.assertEqual(user.pk, self.user1.pk)
         # after "creating" the user, is still 1, that means it was retrieve it
         self.assertEqual(User.objects.all().count(), 1)
+
+
+class TestWelcomeMail(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user1 = User.objects.create(**user1_data)
+
+    def test_send_email(self):
+        send_welcome_email(self.user1)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(
+            "Bienvenido",
+            mail.outbox[0].subject,
+        )

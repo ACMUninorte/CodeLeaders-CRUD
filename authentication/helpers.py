@@ -1,3 +1,4 @@
+from authentication.emails import WelcomeEmail
 from authentication.models import Profile, User
 
 
@@ -30,4 +31,5 @@ def get_or_create_user(data):
     return user
 
 
-#
+def send_welcome_email(user):
+    WelcomeEmail(context={"user": user}).send([user.email])
