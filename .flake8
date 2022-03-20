@@ -4,3 +4,5 @@ exclude = .flake8,.git,__pycache__
 per-file-ignores =
     # multiple settings
     chapters_api/settings/*: F401, F403, F405
+    # signals
+    authentication/apps.py: F401

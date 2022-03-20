@@ -1,5 +1,5 @@
 from authentication.emails import WelcomeEmail
-from authentication.models import Profile, User
+from authentication.models import User
 
 
 def get_or_create_user(data):
@@ -18,12 +18,14 @@ def get_or_create_user(data):
     user, created = User.objects.get_or_create(username=username, defaults=data)
 
     if created:
-
-        Profile.objects.create(user=user, **profile_data)
+        # Before adding signals Profile.objects.create(user=user, **profile_data)
+        user_profile = user.profile
+        for k, v in profile_data.items():
+            setattr(user_profile, k, v)
+        user_profile.save()
 
         # add random password, may be ignored by using
         # UNUSABLE PASSWORD of django internals
-
         password = User.objects.make_random_password()
         user.set_password(password)
         user.save(update_fields=["password"])

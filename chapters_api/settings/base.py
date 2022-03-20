@@ -91,11 +91,15 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
+    "USER_ID_FIELD": "pk",
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": config("PASSWORD_RESET_CONFIRM_URL"),
     "PERMISSIONS": {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+    },
+    "SERIALIZERS": {
+        "current_user": "authentication.serializers.CustomUserSerializer",
     },
     "TOKEN_MODEL": None,
     "HIDE_USERS": False,
